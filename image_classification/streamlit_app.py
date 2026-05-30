@@ -9,11 +9,17 @@ st.set_page_config(page_title='COVID-19 Chest X-Ray Detector', layout='centered'
 st.title('🩺 COVID-19 Chest X-Ray Classification')
 st.write("Upload a chest X-ray image to detect if it is Covid, Normal, or Viral Pneumonia.")
 
-# Load the model and class names
+# Load the model and class names relative to this script's directory
+import os
+
 @st.cache_resource
 def load_artifacts():
-    model = tf.keras.models.load_model('best_covid_cnn_model.h5')
-    with open('class_names.pkl', 'rb') as f:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(script_dir, 'best_covid_cnn_model.h5')
+    pickle_path = os.path.join(script_dir, 'class_names.pkl')
+    
+    model = tf.keras.models.load_model(model_path)
+    with open(pickle_path, 'rb') as f:
         class_names = pickle.load(f)
     return model, class_names
 
